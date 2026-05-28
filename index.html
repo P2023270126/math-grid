@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Rocket Math Mission</title>
+  <title>Rocket Math Mission v2</title>
   <style>
     :root {
       --blue: #2563eb;
@@ -41,7 +41,7 @@
       width: 100%;
       max-width: 520px;
       min-height: 100vh;
-      padding: 12px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
     }
@@ -62,8 +62,8 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      margin-bottom: 8px;
-      min-height: 40px;
+      margin-bottom: 4px;
+      min-height: 34px;
     }
 
     .small-btn {
@@ -71,9 +71,9 @@
       background: #eaf2ff;
       color: var(--blue-dark);
       border-radius: 999px;
-      padding: 8px 12px;
+      padding: 6px 10px;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 13px;
       box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
       cursor: pointer;
     }
@@ -83,9 +83,9 @@
     }
 
     .sound-btn {
-      min-width: 44px;
-      height: 40px;
-      font-size: 20px;
+      min-width: 38px;
+      height: 34px;
+      font-size: 18px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -228,8 +228,8 @@
       color: white;
       font-size: 20px;
       font-weight: 900;
-      padding: 15px 18px;
-      margin-top: 16px;
+      padding: 12px 16px;
+      margin-top: 10px;
       box-shadow: 0 8px 16px rgba(37, 99, 235, 0.26);
       cursor: pointer;
     }
@@ -261,36 +261,36 @@
     .game-header {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 5px;
+      gap: 3px;
       text-align: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .game-meta {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 900;
       color: var(--blue-dark);
       background: rgba(255,255,255,0.72);
       border-radius: 999px;
-      padding: 8px 10px;
+      padding: 6px 8px;
       border: 1px solid #dbeafe;
     }
 
     .rocket-progress-wrap {
       background: white;
       border-radius: 18px;
-      padding: 9px 8px;
+      padding: 6px 6px;
       box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
       border: 1px solid #e0ecff;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       justify-content: center;
-      margin-bottom: 10px;
+      margin-bottom: 7px;
     }
 
     .rocket-icon {
-      font-size: 23px;
+      font-size: 20px;
       display: inline-block;
     }
 
@@ -305,15 +305,15 @@
     }
 
     .progress-box {
-      width: 28px;
-      height: 28px;
-      border-radius: 9px;
+      width: 23px;
+      height: 23px;
+      border-radius: 8px;
       background: #f1f5f9;
       border: 2px solid #dbeafe;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 13px;
       font-weight: 900;
     }
 
@@ -331,19 +331,19 @@
     .equation-card {
       background: white;
       border-radius: 24px;
-      padding: 15px 10px;
+      padding: 9px 8px;
       box-shadow: var(--shadow);
       text-align: center;
       border: 2px solid #dbeafe;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .equation {
-      font-size: clamp(30px, 8vw, 42px);
+      font-size: clamp(28px, 7.6vw, 39px);
       font-weight: 950;
       color: #111827;
-      line-height: 1.2;
-      min-height: 52px;
+      line-height: 1.12;
+      min-height: 45px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -353,9 +353,9 @@
 
     .box-slot {
       display: inline-flex;
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
       border: 3px solid #94a3b8;
       align-items: center;
       justify-content: center;
@@ -379,19 +379,19 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      gap: 8px;
       width: 100%;
-      max-width: 380px;
-      margin: 0 auto 12px;
+      max-width: 360px;
+      margin: 0 auto 8px;
     }
 
     .cell {
       aspect-ratio: 1 / 1;
       border: 2px solid #bfdbfe;
-      border-radius: 20px;
+      border-radius: 18px;
       background: #ffffff;
-      box-shadow: 0 6px 13px rgba(15, 23, 42, 0.10);
-      font-size: clamp(30px, 10vw, 42px);
+      box-shadow: 0 5px 11px rgba(15, 23, 42, 0.09);
+      font-size: clamp(28px, 9vw, 39px);
       font-weight: 950;
       color: #1e293b;
       display: flex;
@@ -442,21 +442,21 @@
     }
 
     .selected-preview {
-      min-height: 28px;
+      min-height: 23px;
       text-align: center;
       color: var(--muted);
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 850;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
 
     .toast {
-      min-height: 25px;
+      min-height: 20px;
       text-align: center;
       color: var(--red);
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 900;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       opacity: 0;
       transition: opacity 0.15s ease;
     }
@@ -466,8 +466,8 @@
     }
 
     .feedback-card {
-      margin-top: 10px;
-      padding: 15px;
+      margin-top: 6px;
+      padding: 10px;
       display: none;
     }
 
@@ -484,10 +484,10 @@
     }
 
     .answer-line {
-      border-radius: 15px;
-      padding: 11px 10px;
-      margin-top: 8px;
-      font-size: 17px;
+      border-radius: 13px;
+      padding: 8px 8px;
+      margin-top: 6px;
+      font-size: 15px;
       font-weight: 900;
       line-height: 1.35;
       word-break: break-word;
@@ -534,13 +534,21 @@
     }
 
     .rocket-launch.launch {
-      animation: launchRocket 1.45s ease-in-out;
+      animation: launchRocketVibrate 3s ease-in-out;
     }
 
-    @keyframes launchRocket {
-      0% { transform: translateY(18px) scale(0.85) rotate(0deg); opacity: 0.6; }
-      35% { transform: translateY(0) scale(1.08) rotate(8deg); opacity: 1; }
-      100% { transform: translateY(-50px) scale(0.95) rotate(18deg); opacity: 0.3; }
+    @keyframes launchRocketVibrate {
+      0% { transform: translateY(12px) scale(0.92) rotate(0deg); opacity: 0.85; }
+      8% { transform: translateY(4px) scale(1.04) rotate(-7deg); opacity: 1; }
+      16% { transform: translateY(0) scale(1.08) rotate(7deg); }
+      24% { transform: translateY(-4px) scale(1.05) rotate(-6deg); }
+      32% { transform: translateY(-2px) scale(1.08) rotate(6deg); }
+      40% { transform: translateY(-7px) scale(1.05) rotate(-5deg); }
+      52% { transform: translateY(-4px) scale(1.08) rotate(5deg); }
+      64% { transform: translateY(-12px) scale(1.04) rotate(-4deg); }
+      76% { transform: translateY(-22px) scale(1.03) rotate(6deg); }
+      88% { transform: translateY(-34px) scale(0.98) rotate(12deg); opacity: 0.75; }
+      100% { transform: translateY(-50px) scale(0.94) rotate(18deg); opacity: 0.38; }
     }
 
     .footer-note {
@@ -552,20 +560,20 @@
     }
 
     @media (max-width: 390px) {
-      .app { padding: 9px; }
+      .app { padding: 7px; }
       h1 { font-size: 30px; }
-      .grid { gap: 8px; max-width: 340px; }
-      .cell { border-radius: 17px; }
+      .grid { gap: 7px; max-width: 332px; }
+      .cell { border-radius: 16px; }
       .progress-box {
-        width: 25px;
-        height: 25px;
-        font-size: 14px;
-        border-radius: 8px;
+        width: 21px;
+        height: 21px;
+        font-size: 12px;
+        border-radius: 7px;
       }
-      .rocket-progress-wrap { gap: 4px; padding: 8px 5px; }
+      .rocket-progress-wrap { gap: 3px; padding: 5px 4px; }
       .box-slot {
-        width: 46px;
-        height: 46px;
+        width: 42px;
+        height: 42px;
       }
     }
   </style>
@@ -629,7 +637,7 @@
       </div>
 
       <div class="game-header">
-        <div id="gameMeta" class="game-meta">Level 1 &nbsp; Question 1 / 10 &nbsp; Score: 0</div>
+        <div id="gameMeta" class="game-meta">Level 1 &nbsp; Question 1</div>
       </div>
 
       <div class="rocket-progress-wrap">
@@ -774,6 +782,13 @@
       playTone(360, 0.10, "sine", 0.035, 0.18);
     }
 
+    function playRepeated(soundFn, times, intervalMs) {
+      if (!soundOn) return;
+      for (let i = 0; i < times; i++) {
+        setTimeout(soundFn, i * intervalMs);
+      }
+    }
+
     function speak(text) {
       if (!soundOn || !("speechSynthesis" in window)) return;
       window.speechSynthesis.cancel();
@@ -916,8 +931,8 @@
 
     function startMissionFromInstruction() {
       localStorage.setItem("rocketMathInstructionSeen_L" + currentLevel, "true");
-      playMissionStartSound();
-      setTimeout(startRound, 180);
+      playRepeated(playMissionStartSound, 3, 260);
+      setTimeout(startRound, 760);
     }
 
     function startRound() {
@@ -973,7 +988,7 @@
       $("toast").textContent = "";
 
       const q = getCurrentQuestion();
-      $("gameMeta").textContent = `Level ${currentLevel}     Question ${currentQuestionIndex + 1} / ${ROUND_SIZE}     Score: ${score}`;
+      $("gameMeta").textContent = `Level ${currentLevel}     Question ${currentQuestionIndex + 1}`;
       renderProgress();
       renderEquation();
       renderGrid();
@@ -1141,7 +1156,7 @@
         progressMarks[currentQuestionIndex] = "🎉";
         renderGrid("correct", selectedCells.map(c => c.index), []);
         showCorrectFeedback(playerExpression);
-        playCorrectSound();
+        playRepeated(playCorrectSound, 2, 360);
       } else {
         progressMarks[currentQuestionIndex] = "⛔";
         const wrongIndices = selectedCells.map(c => c.index);
@@ -1161,12 +1176,16 @@
 
         renderGrid("wrong", correctIndices, wrongIndices);
         showWrongFeedback(playerExpression, correctExpression);
-        playWrongSound();
+        playRepeated(playWrongSound, 2, 390);
       }
 
       renderProgress();
       bumpRocket();
-      $("gameMeta").textContent = `Level ${currentLevel}     Question ${currentQuestionIndex + 1} / ${ROUND_SIZE}     Score: ${score}`;
+      $("gameMeta").textContent = `Level ${currentLevel}     Question ${currentQuestionIndex + 1}`;
+
+      setTimeout(() => {
+        $("feedbackCard").scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 120);
     }
 
     function formatNumber(n) {
@@ -1283,7 +1302,7 @@
       }
 
       const word = numberWords[score] || String(score);
-      setTimeout(() => speak(`Mission completed! You scored ${word}!`), 350);
+      setTimeout(() => speak(`Mission completed! You scored ${word}! ${encourage}`), 350);
     }
 
     function goToLevels() {
