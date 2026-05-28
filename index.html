@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Rocket Math Mission</title>
+  <style>
+    :root {
+      --blue: #2563eb;
+      --blue-dark: #1e40af;
+      --blue-light: #dbeafe;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --yellow: #facc15;
+      --bg: #f8fbff;
+      --text: #172033;
+      --muted: #64748b;
+      --card: #ffffff;
+      --shadow: 0 10px 24px rgba(30, 64, 175, 0.14);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef6ff 0%, #ffffff 52%, #eef6ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      min-height: 100vh;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      flex: 1;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      min-height: 40px;
+    }
+
+    .small-btn {
+      border: none;
+      background: #eaf2ff;
+      color: var(--blue-dark);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 800;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+      cursor: pointer;
+    }
+
+    .small-btn:active {
+      transform: scale(0.97);
+    }
+
+    .sound-btn {
+      min-width: 44px;
+      height: 40px;
+      font-size: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title-card {
+      margin-top: 12px;
+      background: var(--card);
+      border-radius: 28px;
+      padding: 24px 18px 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 2px solid #e0ecff;
+    }
+
+    .title-icon {
+      font-size: 54px;
+      margin-bottom: 4px;
+      animation: floatRocket 2.3s ease-in-out infinite;
+    }
+
+    @keyframes floatRocket {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    h1 {
+      margin: 6px 0;
+      font-size: 34px;
+      line-height: 1.05;
+      color: var(--blue-dark);
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 17px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .level-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 18px;
+      padding-bottom: 16px;
+    }
+
+    .level-card {
+      width: 100%;
+      border: 0;
+      background: #ffffff;
+      border-radius: var(--radius);
+      padding: 18px 18px;
+      text-align: left;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10);
+      border: 2px solid #dbeafe;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .level-card::after {
+      content: "🚀";
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 34px;
+      opacity: 0.22;
+    }
+
+    .level-card:active {
+      transform: scale(0.985);
+    }
+
+    .level-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--blue-dark);
+    }
+
+    .level-desc {
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .loading-box, .error-box {
+      background: white;
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .error-box {
+      color: var(--red);
+      display: none;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+
+    .instruction-card, .result-card, .feedback-card {
+      background: white;
+      border-radius: 26px;
+      padding: 22px 18px;
+      box-shadow: var(--shadow);
+      border: 2px solid #dbeafe;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .instruction-card h2,
+    .result-card h2,
+    .feedback-card h2 {
+      margin: 4px 0 12px;
+      font-size: 28px;
+      color: var(--blue-dark);
+    }
+
+    .instruction-text {
+      font-size: 18px;
+      line-height: 1.5;
+      font-weight: 750;
+      color: #334155;
+      white-space: pre-line;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      background: var(--blue);
+      color: white;
+      font-size: 20px;
+      font-weight: 900;
+      padding: 15px 18px;
+      margin-top: 16px;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.26);
+      cursor: pointer;
+    }
+
+    .primary-btn:disabled {
+      background: #cbd5e1;
+      color: #64748b;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .primary-btn:active:not(:disabled) {
+      transform: scale(0.985);
+    }
+
+    .secondary-btn {
+      width: 100%;
+      border: 2px solid #bfdbfe;
+      border-radius: 18px;
+      background: #eff6ff;
+      color: var(--blue-dark);
+      font-size: 19px;
+      font-weight: 900;
+      padding: 14px 18px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .game-header {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .game-meta {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--blue-dark);
+      background: rgba(255,255,255,0.72);
+      border-radius: 999px;
+      padding: 8px 10px;
+      border: 1px solid #dbeafe;
+    }
+
+    .rocket-progress-wrap {
+      background: white;
+      border-radius: 18px;
+      padding: 9px 8px;
+      box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e0ecff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .rocket-icon {
+      font-size: 23px;
+      display: inline-block;
+    }
+
+    .rocket-icon.bump {
+      animation: rocketBump 0.36s ease;
+    }
+
+    @keyframes rocketBump {
+      0% { transform: translateX(0) rotate(0deg); }
+      45% { transform: translateX(9px) rotate(8deg); }
+      100% { transform: translateX(0) rotate(0deg); }
+    }
+
+    .progress-box {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: #f1f5f9;
+      border: 2px solid #dbeafe;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .progress-box.filled {
+      background: #ffffff;
+      animation: popIn 0.25s ease;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      80% { transform: scale(1.16); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .equation-card {
+      background: white;
+      border-radius: 24px;
+      padding: 15px 10px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 2px solid #dbeafe;
+      margin-bottom: 12px;
+    }
+
+    .equation {
+      font-size: clamp(30px, 8vw, 42px);
+      font-weight: 950;
+      color: #111827;
+      line-height: 1.2;
+      min-height: 52px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .box-slot {
+      display: inline-flex;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      border: 3px solid #94a3b8;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      color: var(--blue-dark);
+      margin: 0 2px;
+      font-weight: 950;
+    }
+
+    .box-slot.active-slot {
+      border-color: var(--blue);
+      background: var(--blue-light);
+      animation: flashBox 0.78s ease-in-out infinite;
+    }
+
+    @keyframes flashBox {
+      0%, 100% { box-shadow: 0 0 0 rgba(37,99,235,0); }
+      50% { box-shadow: 0 0 0 6px rgba(37,99,235,0.17); }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto 12px;
+    }
+
+    .cell {
+      aspect-ratio: 1 / 1;
+      border: 2px solid #bfdbfe;
+      border-radius: 20px;
+      background: #ffffff;
+      box-shadow: 0 6px 13px rgba(15, 23, 42, 0.10);
+      font-size: clamp(30px, 10vw, 42px);
+      font-weight: 950;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.12s ease, background 0.12s ease, border 0.12s ease;
+    }
+
+    .cell:active {
+      transform: scale(0.97);
+    }
+
+    .cell.selected {
+      background: var(--blue-light);
+      border-color: var(--blue);
+      color: var(--blue-dark);
+      transform: scale(1.045);
+    }
+
+    .cell.correct {
+      background: var(--green-light);
+      border: 5px solid var(--green);
+      color: #14532d;
+      animation: correctBounce 0.42s ease;
+    }
+
+    @keyframes correctBounce {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    .cell.wrong {
+      background: var(--red-light);
+      border-color: var(--red);
+      color: #7f1d1d;
+      animation: shake 0.35s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .selected-preview {
+      min-height: 28px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 850;
+      margin-bottom: 2px;
+    }
+
+    .toast {
+      min-height: 25px;
+      text-align: center;
+      color: var(--red);
+      font-size: 15px;
+      font-weight: 900;
+      margin-bottom: 4px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .feedback-card {
+      margin-top: 10px;
+      padding: 15px;
+      display: none;
+    }
+
+    .feedback-card.active {
+      display: block;
+    }
+
+    .feedback-title.correct-title {
+      color: var(--green);
+    }
+
+    .feedback-title.wrong-title {
+      color: var(--red);
+    }
+
+    .answer-line {
+      border-radius: 15px;
+      padding: 11px 10px;
+      margin-top: 8px;
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .answer-line.good {
+      background: var(--green-light);
+      color: #14532d;
+      border: 2px solid #86efac;
+    }
+
+    .answer-line.bad {
+      background: var(--red-light);
+      color: #7f1d1d;
+      border: 2px solid #fecaca;
+    }
+
+    .result-score {
+      font-size: 30px;
+      font-weight: 950;
+      color: var(--blue-dark);
+      margin: 8px 0;
+    }
+
+    .stars {
+      font-size: 34px;
+      min-height: 48px;
+      margin: 5px 0;
+    }
+
+    .encourage {
+      font-size: 22px;
+      font-weight: 950;
+      color: #334155;
+      margin-bottom: 10px;
+    }
+
+    .rocket-launch {
+      font-size: 58px;
+      min-height: 76px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .rocket-launch.launch {
+      animation: launchRocket 1.45s ease-in-out;
+    }
+
+    @keyframes launchRocket {
+      0% { transform: translateY(18px) scale(0.85) rotate(0deg); opacity: 0.6; }
+      35% { transform: translateY(0) scale(1.08) rotate(8deg); opacity: 1; }
+      100% { transform: translateY(-50px) scale(0.95) rotate(18deg); opacity: 0.3; }
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      margin-top: auto;
+      padding: 10px 0 4px;
+    }
+
+    @media (max-width: 390px) {
+      .app { padding: 9px; }
+      h1 { font-size: 30px; }
+      .grid { gap: 8px; max-width: 340px; }
+      .cell { border-radius: 17px; }
+      .progress-box {
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+      .rocket-progress-wrap { gap: 4px; padding: 8px 5px; }
+      .box-slot {
+        width: 46px;
+        height: 46px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section id="levelScreen" class="screen active">
+      <div class="top-row">
+        <div></div>
+        <button id="soundBtn1" class="small-btn sound-btn" type="button" aria-label="Toggle sound">🔊</button>
+      </div>
+
+      <div class="title-card">
+        <div class="title-icon">🚀</div>
+        <h1>Rocket Math Mission</h1>
+        <div class="subtitle">Fill the boxes. Launch the rocket!</div>
+      </div>
+
+      <div id="loadingBox" class="loading-box">Loading mission data...</div>
+      <div id="errorBox" class="error-box"></div>
+
+      <div id="levelList" class="level-list" style="display:none;">
+        <button class="level-card" data-level="1" type="button">
+          <div class="level-title">Level 1 ⭐</div>
+          <div class="level-desc">Two Numbers + / -</div>
+        </button>
+        <button class="level-card" data-level="2" type="button">
+          <div class="level-title">Level 2 ⭐⭐</div>
+          <div class="level-desc">Three Numbers + / -</div>
+        </button>
+        <button class="level-card" data-level="3" type="button">
+          <div class="level-title">Level 3 ⭐⭐⭐</div>
+          <div class="level-desc">Two Numbers × / ÷</div>
+        </button>
+        <button class="level-card" data-level="4" type="button">
+          <div class="level-title">Level 4 ⭐⭐⭐⭐</div>
+          <div class="level-desc">Mixed Challenge</div>
+        </button>
+      </div>
+      <div class="footer-note">Database: Google Sheet CSV</div>
+    </section>
+
+    <section id="instructionScreen" class="screen">
+      <div class="top-row">
+        <button id="backFromInstruction" class="small-btn" type="button">← Levels</button>
+        <button id="soundBtn2" class="small-btn sound-btn" type="button" aria-label="Toggle sound">🔊</button>
+      </div>
+
+      <div class="instruction-card">
+        <div style="font-size:46px;">🚀</div>
+        <h2 id="instructionTitle">Level 1 ⭐</h2>
+        <div id="instructionText" class="instruction-text"></div>
+        <button id="startMissionBtn" class="primary-btn" type="button">Start Mission</button>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen">
+      <div class="top-row">
+        <button id="backToLevels" class="small-btn" type="button">← Levels</button>
+        <button id="soundBtn3" class="small-btn sound-btn" type="button" aria-label="Toggle sound">🔊</button>
+      </div>
+
+      <div class="game-header">
+        <div id="gameMeta" class="game-meta">Level 1 &nbsp; Question 1 / 10 &nbsp; Score: 0</div>
+      </div>
+
+      <div class="rocket-progress-wrap">
+        <span id="rocketIcon" class="rocket-icon">🚀</span>
+        <div id="rocketProgress"></div>
+      </div>
+
+      <div class="equation-card">
+        <div id="equation" class="equation"></div>
+      </div>
+
+      <div id="numberGrid" class="grid"></div>
+
+      <div id="selectedPreview" class="selected-preview">Select numbers from the grid.</div>
+      <div id="toast" class="toast"></div>
+
+      <button id="confirmBtn" class="primary-btn" type="button" disabled>Confirm Answer</button>
+
+      <div id="feedbackCard" class="feedback-card">
+        <h2 id="feedbackTitle" class="feedback-title">Correct!</h2>
+        <div id="yourAnswerLine" class="answer-line"></div>
+        <div id="correctAnswerLine" class="answer-line good" style="display:none;"></div>
+        <button id="nextBtn" class="primary-btn" type="button">Next Question</button>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen">
+      <div class="top-row">
+        <div></div>
+        <button id="soundBtn4" class="small-btn sound-btn" type="button" aria-label="Toggle sound">🔊</button>
+      </div>
+
+      <div class="result-card">
+        <div id="rocketLaunch" class="rocket-launch">🚀</div>
+        <h2>Mission Complete!</h2>
+        <div id="resultScore" class="result-score">You scored 8 / 10!</div>
+        <div id="resultStars" class="stars">⭐⭐</div>
+        <div id="resultEncourage" class="encourage">Great mission!</div>
+
+        <button id="playAgainBtn" class="primary-btn" type="button">Play Again</button>
+        <button id="chooseLevelBtn" class="secondary-btn" type="button">Choose Level</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const GRID_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfFqR0y_G4nkWrM8RXgEr8Dgx0D2ajst6DNFIEPL0SVqn71L2pqklrl2-I5ZjXcOy8EDfJPJLA83E-/pub?gid=0&single=true&output=csv";
+    const QUESTION_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfFqR0y_G4nkWrM8RXgEr8Dgx0D2ajst6DNFIEPL0SVqn71L2pqklrl2-I5ZjXcOy8EDfJPJLA83E-/pub?gid=1510820350&single=true&output=csv";
+
+    const ROUND_SIZE = 10;
+
+    let grids = [];
+    let questions = [];
+    let currentLevel = null;
+    let currentGrid = null;
+    let roundQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let selectedCells = [];
+    let progressMarks = [];
+    let soundOn = localStorage.getItem("rocketMathSoundOn") !== "false";
+    let audioCtx = null;
+    let resultLocked = false;
+
+    const levelInfo = {
+      1: { title: "Level 1 ⭐", desc: "Two Numbers + / -", instruction: "Two Numbers + / -\n\nChoose 2 numbers to fill the boxes.\nTap a number again to cancel." },
+      2: { title: "Level 2 ⭐⭐", desc: "Three Numbers + / -", instruction: "Three Numbers + / -\n\nChoose 3 numbers to fill the boxes.\nTap a number again to cancel." },
+      3: { title: "Level 3 ⭐⭐⭐", desc: "Two Numbers × / ÷", instruction: "Two Numbers × / ÷\n\nChoose 2 numbers to fill the boxes.\nFor division, order matters.\nFill the boxes from left to right." },
+      4: { title: "Level 4 ⭐⭐⭐⭐", desc: "Mixed Challenge", instruction: "Mixed Challenge\n\nChoose 3 numbers to fill the boxes.\nFill the boxes from left to right.\nRemember: × and ÷ first." }
+    };
+
+    const correctMessages = ["Correct!", "Great!", "Well done!", "Excellent!", "Nice work!"];
+    const numberWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+
+    const $ = (id) => document.getElementById(id);
+
+    function showScreen(screenId) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      $(screenId).classList.add("active");
+    }
+
+    function updateSoundButtons() {
+      const icon = soundOn ? "🔊" : "🔇";
+      ["soundBtn1", "soundBtn2", "soundBtn3", "soundBtn4"].forEach(id => {
+        const el = $(id);
+        if (el) el.textContent = icon;
+      });
+    }
+
+    function toggleSound() {
+      soundOn = !soundOn;
+      localStorage.setItem("rocketMathSoundOn", String(soundOn));
+      updateSoundButtons();
+      if (!soundOn && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function ensureAudio() {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioCtx = new Ctx();
+      }
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playTone(freq, duration, type = "sine", volume = 0.08, startOffset = 0) {
+      if (!soundOn) return;
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.value = 0;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      const start = ctx.currentTime + startOffset;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(volume, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+      osc.start(start);
+      osc.stop(start + duration + 0.02);
+    }
+
+    function playCorrectSound() {
+      playTone(660, 0.12, "sine", 0.08, 0);
+      playTone(880, 0.15, "sine", 0.08, 0.12);
+      playTone(1040, 0.14, "sine", 0.06, 0.25);
+    }
+
+    function playWrongSound() {
+      playTone(220, 0.18, "triangle", 0.07, 0);
+      playTone(165, 0.22, "triangle", 0.06, 0.16);
+    }
+
+    function playMissionStartSound() {
+      // Soft cartoon launch boom.
+      playTone(90, 0.16, "sawtooth", 0.06, 0);
+      playTone(150, 0.13, "square", 0.04, 0.08);
+      playTone(360, 0.10, "sine", 0.035, 0.18);
+    }
+
+    function speak(text) {
+      if (!soundOn || !("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "en-US";
+      utter.rate = 0.9;
+      utter.pitch = 1.05;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let field = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"' && inQuotes && next === '"') {
+          field += '"';
+          i++;
+        } else if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === "," && !inQuotes) {
+          row.push(field);
+          field = "";
+        } else if ((char === "\n" || char === "\r") && !inQuotes) {
+          if (char === "\r" && next === "\n") i++;
+          row.push(field);
+          if (row.some(cell => String(cell).trim() !== "")) rows.push(row);
+          row = [];
+          field = "";
+        } else {
+          field += char;
+        }
+      }
+
+      row.push(field);
+      if (row.some(cell => String(cell).trim() !== "")) rows.push(row);
+      return rows;
+    }
+
+    function rowsToObjects(rows) {
+      const headers = rows[0].map(h => h.trim());
+      return rows.slice(1).map(row => {
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = (row[i] ?? "").trim());
+        return obj;
+      });
+    }
+
+    async function loadDatabase() {
+      try {
+        const [gridRes, questionRes] = await Promise.all([
+          fetch(GRID_CSV_URL, { cache: "no-store" }),
+          fetch(QUESTION_CSV_URL, { cache: "no-store" })
+        ]);
+
+        if (!gridRes.ok || !questionRes.ok) {
+          throw new Error("Could not load Google Sheet CSV.");
+        }
+
+        const [gridText, questionText] = await Promise.all([
+          gridRes.text(),
+          questionRes.text()
+        ]);
+
+        grids = rowsToObjects(parseCSV(gridText))
+          .filter(r => String(r.Active).toUpperCase() === "TRUE")
+          .map(r => ({
+            gridId: r.GridID,
+            level: Number(r.Level),
+            numbers: r.GridNumbers.split(",").map(n => Number(String(n).trim())),
+            active: true
+          }))
+          .filter(g => g.gridId && g.numbers.length === 16 && g.numbers.every(n => Number.isFinite(n)));
+
+        questions = rowsToObjects(parseCSV(questionText))
+          .filter(r => String(r.Active).toUpperCase() === "TRUE")
+          .map(r => ({
+            questionId: r.QuestionID,
+            level: Number(r.Level),
+            gridId: r.GridID,
+            displayEquation: r.DisplayEquation,
+            pattern: r.Pattern,
+            requiredCount: Number(r.RequiredCount),
+            target: Number(r.Target),
+            operatorType: r.OperatorType,
+            orderMatters: String(r.OrderMatters).toUpperCase() === "TRUE",
+            sampleSolution: r.SampleSolution.split("|").map(n => Number(String(n).trim())),
+            sampleExpression: r.SampleExpression,
+            active: true
+          }))
+          .filter(q => q.questionId && q.gridId && q.requiredCount > 0 && Number.isFinite(q.target));
+
+        if (grids.length === 0 || questions.length === 0) {
+          throw new Error("Database loaded, but no active Grids or Questions were found.");
+        }
+
+        $("loadingBox").style.display = "none";
+        $("levelList").style.display = "grid";
+      } catch (err) {
+        $("loadingBox").style.display = "none";
+        $("errorBox").style.display = "block";
+        $("errorBox").textContent = "Database loading error:\n" + err.message + "\n\nPlease check the published Google Sheet CSV links.";
+      }
+    }
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function chooseRandom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function selectLevel(level) {
+      currentLevel = Number(level);
+      const key = "rocketMathInstructionSeen_L" + currentLevel;
+      if (localStorage.getItem(key) === "true") {
+        startRound();
+      } else {
+        showInstruction();
+      }
+    }
+
+    function showInstruction() {
+      const info = levelInfo[currentLevel];
+      $("instructionTitle").textContent = info.title;
+      $("instructionText").textContent = info.instruction;
+      showScreen("instructionScreen");
+    }
+
+    function startMissionFromInstruction() {
+      localStorage.setItem("rocketMathInstructionSeen_L" + currentLevel, "true");
+      playMissionStartSound();
+      setTimeout(startRound, 180);
+    }
+
+    function startRound() {
+      const levelGrids = grids.filter(g => g.level === currentLevel);
+      if (levelGrids.length === 0) {
+        alert("No active grid found for Level " + currentLevel);
+        showScreen("levelScreen");
+        return;
+      }
+
+      currentGrid = chooseRandom(levelGrids);
+      const pool = questions.filter(q => q.level === currentLevel && q.gridId === currentGrid.gridId);
+
+      if (pool.length < ROUND_SIZE) {
+        alert("Not enough active questions for " + currentGrid.gridId + ". Need at least 10.");
+        showScreen("levelScreen");
+        return;
+      }
+
+      roundQuestions = shuffle(pool).slice(0, ROUND_SIZE);
+      currentQuestionIndex = 0;
+      score = 0;
+      progressMarks = Array(ROUND_SIZE).fill("");
+      showScreen("gameScreen");
+      loadQuestion();
+    }
+
+    function renderProgress() {
+      const container = $("rocketProgress");
+      container.innerHTML = "";
+      progressMarks.forEach(mark => {
+        const box = document.createElement("span");
+        box.className = "progress-box" + (mark ? " filled" : "");
+        box.textContent = mark || "";
+        container.appendChild(box);
+      });
+    }
+
+    function bumpRocket() {
+      const rocket = $("rocketIcon");
+      rocket.classList.remove("bump");
+      void rocket.offsetWidth;
+      rocket.classList.add("bump");
+    }
+
+    function loadQuestion() {
+      resultLocked = false;
+      selectedCells = [];
+      $("feedbackCard").classList.remove("active");
+      $("confirmBtn").style.display = "block";
+      $("confirmBtn").disabled = true;
+      $("toast").classList.remove("show");
+      $("toast").textContent = "";
+
+      const q = getCurrentQuestion();
+      $("gameMeta").textContent = `Level ${currentLevel}     Question ${currentQuestionIndex + 1} / ${ROUND_SIZE}     Score: ${score}`;
+      renderProgress();
+      renderEquation();
+      renderGrid();
+      updateSelectedPreview();
+    }
+
+    function getCurrentQuestion() {
+      return roundQuestions[currentQuestionIndex];
+    }
+
+    function getPatternTokens(pattern) {
+      const tokens = [];
+      for (const ch of pattern) {
+        if (["A", "B", "C"].includes(ch)) tokens.push(ch);
+      }
+      return tokens;
+    }
+
+    function renderEquation() {
+      const q = getCurrentQuestion();
+      const tokens = getPatternTokens(q.pattern);
+      const valuesByToken = {};
+      selectedCells.forEach((cell, idx) => {
+        valuesByToken[tokens[idx]] = cell.value;
+      });
+
+      const display = q.displayEquation;
+      let slotIndex = 0;
+      const parts = [];
+      for (let i = 0; i < display.length; i++) {
+        const ch = display[i];
+        if (ch === "□") {
+          const val = selectedCells[slotIndex]?.value;
+          const isActive = slotIndex === selectedCells.length && selectedCells.length < q.requiredCount;
+          parts.push(`<span class="box-slot ${isActive ? "active-slot" : ""}">${val ?? ""}</span>`);
+          slotIndex++;
+        } else if (ch === " ") {
+          parts.push(" ");
+        } else {
+          parts.push(`<span>${ch}</span>`);
+        }
+      }
+      $("equation").innerHTML = parts.join("");
+    }
+
+    function renderGrid(status = null, correctIndices = [], wrongIndices = []) {
+      const grid = $("numberGrid");
+      grid.innerHTML = "";
+      currentGrid.numbers.forEach((num, idx) => {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.textContent = num;
+        cell.dataset.index = idx;
+        cell.dataset.value = num;
+
+        const selected = selectedCells.some(c => c.index === idx);
+        if (!status && selected) cell.classList.add("selected");
+        if (status === "correct" && correctIndices.includes(idx)) cell.classList.add("correct");
+        if (status === "wrong") {
+          if (wrongIndices.includes(idx)) cell.classList.add("wrong");
+          if (correctIndices.includes(idx)) cell.classList.add("correct");
+        }
+
+        if (!resultLocked) {
+          cell.addEventListener("click", () => toggleCell(idx, num));
+        }
+        grid.appendChild(cell);
+      });
+    }
+
+    function toggleCell(index, value) {
+      const q = getCurrentQuestion();
+      const existingIndex = selectedCells.findIndex(c => c.index === index);
+
+      if (existingIndex >= 0) {
+        selectedCells.splice(existingIndex, 1);
+        renderEquation();
+        renderGrid();
+        updateSelectedPreview();
+        return;
+      }
+
+      if (selectedCells.length >= q.requiredCount) {
+        showToast(`${q.requiredCount} numbers only!`);
+        return;
+      }
+
+      selectedCells.push({ index, value });
+      renderEquation();
+      renderGrid();
+      updateSelectedPreview();
+    }
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 950);
+    }
+
+    function updateSelectedPreview() {
+      const q = getCurrentQuestion();
+      if (selectedCells.length === 0) {
+        $("selectedPreview").textContent = "Select numbers from the grid.";
+      } else {
+        $("selectedPreview").textContent = "Selected: " + selectedCells.map(c => c.value).join(" → ");
+      }
+      $("confirmBtn").disabled = selectedCells.length !== q.requiredCount;
+    }
+
+    function calculatePattern(pattern, values) {
+      const [A, B, C] = values;
+      switch (pattern) {
+        case "A+B": return A + B;
+        case "A-B": return A - B;
+        case "A+B+C": return A + B + C;
+        case "A+B-C": return A + B - C;
+        case "A-B+C": return A - B + C;
+        case "A*B": return A * B;
+        case "A/B": return B === 0 ? NaN : A / B;
+        case "A+B*C": return A + B * C;
+        case "A*B-C": return A * B - C;
+        case "A*B+C": return A * B + C;
+        case "A+B/C": return C === 0 ? NaN : A + B / C;
+        case "A-B/C": return C === 0 ? NaN : A - B / C;
+        default:
+          throw new Error("Unsupported pattern: " + pattern);
+      }
+    }
+
+    function makeExpression(pattern, values) {
+      const [A, B, C] = values;
+      switch (pattern) {
+        case "A+B": return `${A} + ${B}`;
+        case "A-B": return `${A} - ${B}`;
+        case "A+B+C": return `${A} + ${B} + ${C}`;
+        case "A+B-C": return `${A} + ${B} - ${C}`;
+        case "A-B+C": return `${A} - ${B} + ${C}`;
+        case "A*B": return `${A} × ${B}`;
+        case "A/B": return `${A} ÷ ${B}`;
+        case "A+B*C": return `${A} + ${B} × ${C}`;
+        case "A*B-C": return `${A} × ${B} - ${C}`;
+        case "A*B+C": return `${A} × ${B} + ${C}`;
+        case "A+B/C": return `${A} + ${B} ÷ ${C}`;
+        case "A-B/C": return `${A} - ${B} ÷ ${C}`;
+        default: return values.join(" ");
+      }
+    }
+
+    function confirmAnswer() {
+      const q = getCurrentQuestion();
+      if (selectedCells.length !== q.requiredCount) return;
+
+      resultLocked = true;
+      $("confirmBtn").style.display = "none";
+
+      const playerValues = selectedCells.map(c => c.value);
+      const playerResult = calculatePattern(q.pattern, playerValues);
+      const isCorrect = Math.abs(playerResult - q.target) < 1e-9;
+
+      const playerExpression = `${makeExpression(q.pattern, playerValues)} = ${formatNumber(playerResult)}`;
+
+      if (isCorrect) {
+        score++;
+        progressMarks[currentQuestionIndex] = "🎉";
+        renderGrid("correct", selectedCells.map(c => c.index), []);
+        showCorrectFeedback(playerExpression);
+        playCorrectSound();
+      } else {
+        progressMarks[currentQuestionIndex] = "⛔";
+        const wrongIndices = selectedCells.map(c => c.index);
+        let correctIndices = findCellsForValues(q.sampleSolution);
+        let correctExpression = q.sampleExpression;
+
+        if (!correctIndices) {
+          const found = findValidSolution(q);
+          if (found) {
+            correctIndices = found.indices;
+            correctExpression = `${makeExpression(q.pattern, found.values)} = ${q.target}`;
+          } else {
+            correctIndices = [];
+            correctExpression = q.sampleExpression || "No sample answer found";
+          }
+        }
+
+        renderGrid("wrong", correctIndices, wrongIndices);
+        showWrongFeedback(playerExpression, correctExpression);
+        playWrongSound();
+      }
+
+      renderProgress();
+      bumpRocket();
+      $("gameMeta").textContent = `Level ${currentLevel}     Question ${currentQuestionIndex + 1} / ${ROUND_SIZE}     Score: ${score}`;
+    }
+
+    function formatNumber(n) {
+      if (!Number.isFinite(n)) return "N/A";
+      return Number.isInteger(n) ? String(n) : String(Number(n.toFixed(2)));
+    }
+
+    function findCellsForValues(values) {
+      const used = new Set();
+      const indices = [];
+      for (const val of values) {
+        const idx = currentGrid.numbers.findIndex((num, i) => num === val && !used.has(i));
+        if (idx < 0) return null;
+        used.add(idx);
+        indices.push(idx);
+      }
+      return indices;
+    }
+
+    function findValidSolution(q) {
+      const entries = currentGrid.numbers.map((value, index) => ({ value, index }));
+      const combos = permutations(entries, q.requiredCount);
+      for (const combo of combos) {
+        const values = combo.map(c => c.value);
+        const result = calculatePattern(q.pattern, values);
+        if (Math.abs(result - q.target) < 1e-9) {
+          return { values, indices: combo.map(c => c.index) };
+        }
+      }
+      return null;
+    }
+
+    function permutations(items, length) {
+      const result = [];
+      const used = Array(items.length).fill(false);
+      const current = [];
+
+      function backtrack() {
+        if (current.length === length) {
+          result.push([...current]);
+          return;
+        }
+        for (let i = 0; i < items.length; i++) {
+          if (used[i]) continue;
+          used[i] = true;
+          current.push(items[i]);
+          backtrack();
+          current.pop();
+          used[i] = false;
+        }
+      }
+
+      backtrack();
+      return result;
+    }
+
+    function showCorrectFeedback(playerExpression) {
+      const title = correctMessages[Math.floor(Math.random() * correctMessages.length)];
+      $("feedbackTitle").textContent = title;
+      $("feedbackTitle").className = "feedback-title correct-title";
+      $("yourAnswerLine").className = "answer-line good";
+      $("yourAnswerLine").textContent = `Your answer: ${playerExpression} ✅`;
+      $("correctAnswerLine").style.display = "none";
+      $("feedbackCard").classList.add("active");
+    }
+
+    function showWrongFeedback(playerExpression, correctExpression) {
+      $("feedbackTitle").textContent = "Oops!";
+      $("feedbackTitle").className = "feedback-title wrong-title";
+      $("yourAnswerLine").className = "answer-line bad";
+      $("yourAnswerLine").textContent = `Your answer: ${playerExpression} ❌`;
+      $("correctAnswerLine").style.display = "block";
+      $("correctAnswerLine").textContent = `Correct answer: ${correctExpression} ✅`;
+      $("feedbackCard").classList.add("active");
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= ROUND_SIZE) {
+        showResult();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function showResult() {
+      showScreen("resultScreen");
+      $("resultScore").textContent = `You scored ${score} / ${ROUND_SIZE}!`;
+
+      let stars = "";
+      let encourage = "";
+      if (score === 10) {
+        stars = "⭐⭐⭐";
+        encourage = "Perfect mission!";
+      } else if (score >= 7) {
+        stars = "⭐⭐";
+        encourage = "Great mission!";
+      } else if (score >= 4) {
+        stars = "⭐";
+        encourage = "Good try!";
+      } else {
+        stars = "";
+        encourage = "Try again!";
+      }
+
+      $("resultStars").textContent = stars;
+      $("resultEncourage").textContent = encourage;
+
+      const launch = $("rocketLaunch");
+      launch.classList.remove("launch");
+      void launch.offsetWidth;
+      if (score >= 7) {
+        launch.classList.add("launch");
+      }
+
+      const word = numberWords[score] || String(score);
+      setTimeout(() => speak(`Mission completed! You scored ${word}!`), 350);
+    }
+
+    function goToLevels() {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      showScreen("levelScreen");
+    }
+
+    function initEvents() {
+      ["soundBtn1", "soundBtn2", "soundBtn3", "soundBtn4"].forEach(id => {
+        $(id).addEventListener("click", toggleSound);
+      });
+
+      document.querySelectorAll(".level-card").forEach(btn => {
+        btn.addEventListener("click", () => selectLevel(btn.dataset.level));
+      });
+
+      $("backFromInstruction").addEventListener("click", goToLevels);
+      $("backToLevels").addEventListener("click", goToLevels);
+      $("startMissionBtn").addEventListener("click", startMissionFromInstruction);
+      $("confirmBtn").addEventListener("click", confirmAnswer);
+      $("nextBtn").addEventListener("click", nextQuestion);
+      $("playAgainBtn").addEventListener("click", () => startRound());
+      $("chooseLevelBtn").addEventListener("click", goToLevels);
+    }
+
+    updateSoundButtons();
+    initEvents();
+    loadDatabase();
+  </script>
+</body>
+</html>
