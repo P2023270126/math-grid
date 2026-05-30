@@ -487,7 +487,7 @@
     }
 
     .equation-card {
-      background: var(--paper);
+      background: #f7f7f4;
       border-radius: 15px;
       padding: 10px 8px;
       text-align: center;
@@ -516,7 +516,7 @@
       border: 4px solid var(--type-black);
       align-items: center;
       justify-content: center;
-      background: var(--sunshine);
+      background: #fffdf4;
       color: var(--type-black);
       margin: 0 2px;
       font-weight: 900;
@@ -524,7 +524,7 @@
 
     .box-slot.active-slot {
       border-color: var(--bubble-red);
-      background: var(--paper);
+      background: #fff4ef;
       animation: flashBox 0.78s ease-in-out infinite;
     }
 
@@ -546,7 +546,7 @@
       aspect-ratio: 1 / 1;
       border: 5px solid var(--type-black);
       border-radius: 15px;
-      background: var(--paper);
+      background: #ffffff;
       font-size: clamp(29px, 9vw, 41px);
       font-weight: 900;
       color: var(--type-black);
@@ -558,27 +558,35 @@
       transition: transform 0.12s ease, background 0.12s ease, border 0.12s ease;
     }
 
-    .cell:nth-child(4n+1) { background: #ffffff; transform: rotate(-1deg); }
-    .cell:nth-child(4n+2) { background: #fff0a8; transform: rotate(1deg); }
-    .cell:nth-child(4n+3) { background: #eadfff; transform: rotate(-0.7deg); }
-    .cell:nth-child(4n+4) { background: #dcffd4; transform: rotate(0.8deg); }
+    .cell:nth-child(4n+1),
+    .cell:nth-child(4n+2),
+    .cell:nth-child(4n+3),
+    .cell:nth-child(4n+4) {
+      background: #ffffff;
+      transform: rotate(0deg);
+    }
+
+    .cell:hover {
+      background: #f7f4ff;
+    }
 
     .cell:active {
-      transform: scale(0.96) rotate(0deg);
+      transform: scale(0.96);
+      background: #f3efff;
     }
 
     .cell.selected {
-      background: var(--grape);
-      border-color: var(--paper);
-      color: var(--paper);
-      transform: scale(1.06) rotate(0deg);
+      background: #ece7ff;
+      border-color: var(--grape);
+      color: var(--type-black);
+      transform: scale(1.04);
       outline: 4px solid var(--type-black);
     }
 
     .cell.correct {
-      background: var(--leaf);
+      background: #e7f8e7;
       border: 5px solid var(--type-black);
-      color: var(--paper);
+      color: var(--type-black);
       animation: correctBounce 0.42s ease;
     }
 
@@ -589,9 +597,9 @@
     }
 
     .cell.wrong {
-      background: var(--bubble-red);
-      border-color: var(--type-black);
-      color: var(--paper);
+      background: #ffe4e4;
+      border-color: var(--bubble-red);
+      color: var(--type-black);
       animation: shake 0.35s ease;
     }
 
@@ -610,7 +618,7 @@
       font-size: 15px;
       font-weight: 900;
       margin-bottom: 2px;
-      background: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.72);
       border-radius: 999px;
       padding: 3px 8px;
     }
